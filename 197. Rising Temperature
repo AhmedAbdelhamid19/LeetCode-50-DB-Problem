@@ -1,0 +1,9 @@
+with curPre as (
+    select 
+        id, recordDate as curDate, temperature as curTemp,
+        lag(recordDate, 1) over (order by recordDate) as preDate,
+        lag(temperature, 1) over (order by recordDate) as preTemp
+    from weather
+)
+select id from curPre
+where DATEDIFF(day,preDate ,curDate) = 1 and curTemp > preTemp
