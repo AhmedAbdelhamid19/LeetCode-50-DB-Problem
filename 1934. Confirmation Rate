@@ -1,0 +1,13 @@
+select 
+	s.user_id,
+	ROUND (
+		CASE 
+			WHEN count(c.action) = 0 THEN 0
+			ELSE (
+				SUM(CASE WHEN c.action = 'confirmed' THEN 1 ELSE 0 END) * 1.0 / COUNT(c.action)
+			)
+		END,
+		2
+	) AS confirmation_rate
+from Signups s left join Confirmations c on s.user_id = c.user_id
+group by s.user_id
