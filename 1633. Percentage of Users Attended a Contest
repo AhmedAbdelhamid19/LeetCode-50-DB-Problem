@@ -1,0 +1,8 @@
+with tot as ( 
+	select count(u.user_id) as totUsers
+	from Users u
+)
+select r.contest_id, round(count(r.contest_id) * 100.0/tot.totUsers, 2) as percentage
+from Register r cross join tot
+group by r.contest_id, tot.totUsers
+order by percentage desc, contest_id asc
