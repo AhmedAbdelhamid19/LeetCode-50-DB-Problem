@@ -1,0 +1,14 @@
+with FirstLogin as (
+	select a.player_id, min(a.event_date) as firstDay
+	from Activity a
+	group by a.player_id
+), twoLogins as (
+	select a.player_id
+	from Activity a 
+    inner join FirstLogin f 
+    on a.player_id = f.player_id 
+    and DATEDIFF(day, f.firstDay, a.event_date) = 1
+)
+select Round(count(t.player_id) * 1.0 / count(f.player_id), 2) as fraction
+from FirstLogin f 
+left join twoLogins t on f.player_id = t.player_id
