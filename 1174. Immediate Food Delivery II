@@ -1,0 +1,13 @@
+with MinDate as(
+	select d.customer_id, min(d.order_date) first_date
+	from Delivery d
+	group by d.customer_id
+), status as (
+	select 
+		d.customer_id,
+		case when d.customer_pref_delivery_date = m.first_date then 1 else 0 end as IsImmediate
+	from Delivery d inner join MinDate m on m.customer_id = d.customer_id
+	where m.first_date = d.order_date
+)
+select round(avg(status.IsImmediate * 100.0), 2) as immediate_percentage 
+from status
