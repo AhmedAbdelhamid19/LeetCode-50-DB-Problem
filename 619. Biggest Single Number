@@ -1,0 +1,9 @@
+with res as (
+	select num
+	from MyNumbers
+	group by num
+	Having count(num) = 1
+)
+select 
+    case when count(num) = 0 then null else max(num) end as num
+from res
