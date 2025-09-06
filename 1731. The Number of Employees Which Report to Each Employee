@@ -1,0 +1,8 @@
+with mangers as (
+	select reports_to as manger_id, Round(avg(age * 1.0), 0) as average_age, count(reports_to) as reports_count
+	from Employees
+	where reports_to is not null
+	group by reports_to
+)
+select e.employee_id, e.name, m.reports_count, m.average_age
+from mangers m inner join Employees e on m.manger_id = e.employee_id
