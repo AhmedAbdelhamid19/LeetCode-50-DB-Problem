@@ -1,0 +1,10 @@
+with lastTwo as (
+	select 
+		id, num,
+		lag(num, 1) over(order by id) as first,
+		lag(num, 2) over(order by id) as second
+	from Logs
+)
+select distinct num as ConsecutiveNums 
+from lastTwo
+where num = first and num = second
