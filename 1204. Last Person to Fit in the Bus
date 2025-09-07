@@ -1,0 +1,10 @@
+with prefSum as (
+	select 
+		person_name,
+		sum(weight) over (order by turn) as sum
+	from Queue
+)
+select top 1 person_name
+from prefSum
+where sum <= 1000
+order by sum desc
