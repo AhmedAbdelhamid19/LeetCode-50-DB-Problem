@@ -1,0 +1,12 @@
+with uniqueDay as (
+	select visited_on, sum(amount) as amount
+	from Customer
+	group by visited_on
+)
+select  
+	d1.visited_on, 
+	sum(d2.amount) as 'amount',
+	Round(avg(d2.amount * 1.0), 2) as 'average_amount'
+from uniqueDay d1 inner join uniqueDay d2 on datediff(day, d2.visited_on, d1.visited_on) between 0 and 6
+group by d1.visited_on
+having count(d1.visited_on) = 7
