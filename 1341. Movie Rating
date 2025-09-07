@@ -1,0 +1,21 @@
+with totalRates as (
+	select user_id, count(*) as totRates
+	from MovieRating
+	group by user_id
+), mostRates as (
+	select top 1 name as results
+	from totalRates t inner join Users u on t.user_id = u.user_id
+	order by totRates desc, name asc
+), avgRate as (
+	select movie_id, avg(rating * 1.0) as avarage_rate
+	from MovieRating
+	where month(created_at) = 2 and year(created_at) = 2020
+	group by movie_id
+), heighAvgRate as (
+	select top 1 title as results
+	from avgRate a inner join Movies m on a.movie_id = m.movie_id
+	order by avarage_rate desc, title asc
+)
+select * from mostRates
+union all
+select * from heighAvgRate
