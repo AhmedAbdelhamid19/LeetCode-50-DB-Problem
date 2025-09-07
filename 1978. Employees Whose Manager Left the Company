@@ -1,0 +1,13 @@
+with leftMangers as (
+    select 
+		e.employee_id as 'employee_id' ,
+		m.employee_id as 'manger_id',
+		e.salary
+    from Employees e left join Employees m
+    on e.manager_id = m.employee_id 
+	where e.manager_id is not null
+)
+select  employee_id
+from leftMangers
+where salary < 30000 and manger_id is null
+order by employee_id
