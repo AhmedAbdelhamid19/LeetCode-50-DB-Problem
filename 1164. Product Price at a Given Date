@@ -1,0 +1,18 @@
+with lastDay as (
+	select 
+		product_id,
+		min(case when datediff(day, change_date, '2019-8-16') >= 0 then datediff(day, change_date, '2019-8-16') end) as before
+	from 
+		Products
+	group by 
+		product_id
+)
+select distinct
+	p.product_id,
+	case when l.before is not null then p.new_price else 10 end as price
+from 
+	Products p left join lastDay l 
+on 
+	p.product_id = l.product_id
+where
+	datediff(day, p.change_date, '2019-8-16') = l.before or l.before is null
