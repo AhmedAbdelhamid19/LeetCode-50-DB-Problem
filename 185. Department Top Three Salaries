@@ -1,0 +1,13 @@
+with ranking as (
+	select
+		departmentId,
+		name,
+		salary,
+		dense_rank() over (partition by departmentId order by departmentId, salary desc) salRank
+	from Employee
+)
+select 
+	d.name as 'Department',
+	r.name as 'Employee',
+	r.salary as 'Salary'
+from ranking r inner join Department d on r.departmentId = d.id and r.salRank <= 3
