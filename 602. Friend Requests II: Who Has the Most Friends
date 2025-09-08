@@ -1,0 +1,16 @@
+with requesters as (
+	select requester_id as id, count(*) as friends
+	from RequestAccepted
+	group by requester_id
+), total as (
+	select  accepter_id as id, count(*) as friends
+	from RequestAccepted
+	group by accepter_id
+	union all
+	select id, friends
+	from requesters
+)
+select top 1 id, sum(friends) as num
+from total
+group by id
+order by num desc
