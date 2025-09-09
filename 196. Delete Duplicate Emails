@@ -1,0 +1,12 @@
+delete from Person
+where id not in (
+	select res.Id
+	from (
+		select 
+			id,
+			DENSE_RANK() over (PARTITION BY email order by id) as emailRank
+		from  
+			Person
+	) as res
+	where res.emailRank = 1
+)
