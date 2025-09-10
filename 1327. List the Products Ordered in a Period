@@ -1,0 +1,10 @@
+with validProducts as (
+	select product_id, SUM(unit) as totUnits
+	from orders
+	where year(order_date) = 2020 and month(order_date) = 2
+	group by product_id
+	having sum(unit) >= 100
+)
+
+select p.product_name, totUnits
+from validProducts v inner join Products p on v.product_id = p.product_id
