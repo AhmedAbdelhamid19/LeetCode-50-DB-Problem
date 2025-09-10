@@ -1,0 +1,7 @@
+SELECT *
+FROM Users
+WHERE 
+	len(mail) > 13 and
+	right(mail, 13) collate Latin1_General_CS_AS = '@leetcode.com' and
+	left(mail, 1) like '[a-zA-z]' and
+	substring(mail, 2, Len(mail) - 14) not like '%[^A-Za-z0-9_.-]%'
